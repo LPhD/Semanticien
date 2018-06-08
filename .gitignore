@@ -30,9 +30,6 @@ dist
 test-output
 build.log
 
-#jar files
-out/
-*.jar
 
 # other scm
 .svn
