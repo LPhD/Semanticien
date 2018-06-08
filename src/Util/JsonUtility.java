@@ -11,13 +11,14 @@ import java.net.URL;
 import java.util.Iterator;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JsonUtility {
 
     public static String json = "{ \"id\": 01, \"language\": \"Java\", \"edition\": \"third\", \"author\": \"Herbert Schildt\", \"chapters\": [\"chapter 1\",\"chapter 2\",\"chapter 3\"] }";
 
-    public void readJson(String json) {
+    public void readJson(String json) throws JSONException {
         JSONObject jsonObj = new JSONObject(json);
 
         String id = jsonObj.getString("id");
@@ -33,10 +34,11 @@ public class JsonUtility {
         System.out.println(author);
 
         JSONArray chapters = (JSONArray) jsonObj.get("chapters");
-        Iterator<Object> iterator = chapters.iterator();
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next());
+        for (int i = 0; i < chapters.length(); i++) {
+            System.out.println(chapters.getJSONObject(i));
+
         }
+        
     }
 
     public static String readUrl(String urlString) throws Exception {
@@ -63,7 +65,7 @@ public class JsonUtility {
     }
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws JSONException {
         JsonUtility utility = new JsonUtility();
         //read
         utility.readJson(json);

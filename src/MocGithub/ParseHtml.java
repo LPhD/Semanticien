@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.logging.Level;
@@ -91,11 +92,17 @@ public class ParseHtml {
         LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
-        webClient.getOptions().setUseInsecureSSL(true); //ignore ssl certificate
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setJavaScriptEnabled(true);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.setCssErrorHandler(new SilentCssErrorHandler());
+        try {
+			webClient.setUseInsecureSSL(true);
+		} catch (GeneralSecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} //ignore ssl certificate
+        webClient.setThrowExceptionOnScriptError(false);
+        webClient.setJavaScriptEnabled(true);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+  //      webClient.setCssErrorHandler(new SilentCssErrorHandler());
+        
 
         HtmlPage page = null;
         Document currentPage = null;

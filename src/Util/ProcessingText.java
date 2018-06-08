@@ -26,6 +26,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -779,16 +780,21 @@ sb.append("---"+joined_clusters.size()+" communities\n");
                 String diffLink = "http://www.github.com/" + parentRepo + "/diffs/" + i + "?head_user=" + forkName.split("/")[0] + "&sha1=" + SHA_Array[0] + "&sha2=" + SHA_Array[1].trim() + "&w=1";
 
 
-                WebClient webClient = new WebClient(BrowserVersion.CHROME);
+                WebClient webClient = new WebClient();
                 // turn off htmlunit warnings
                 LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
                 java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
                 java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
-                webClient.getOptions().setUseInsecureSSL(true); //ignore ssl certificate
-                webClient.getOptions().setThrowExceptionOnScriptError(false);
-                webClient.getOptions().setJavaScriptEnabled(true);
-                webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-                webClient.setCssErrorHandler(new SilentCssErrorHandler());
+                try {
+        			webClient.setUseInsecureSSL(true);
+        		} catch (GeneralSecurityException e1) {
+        			// TODO Auto-generated catch block
+        			e1.printStackTrace();
+        		} //ignore ssl certificate
+                webClient.setThrowExceptionOnScriptError(false);
+                webClient.setJavaScriptEnabled(true);
+                webClient.setThrowExceptionOnFailingStatusCode(false);
+          //      webClient.setCssErrorHandler(new SilentCssErrorHandler());
 
                 HtmlPage diff_page = webClient.getPage(diffLink);
                 webClient.waitForBackgroundJavaScriptStartingBefore(2000);
